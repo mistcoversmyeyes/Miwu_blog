@@ -1,5 +1,5 @@
 ---
-title: "Programing Language: 5 easy pieces"
+title: "Programming Language: 5 easy pieces"
 published: 2025-12-12
 description: ""
 image: ""
