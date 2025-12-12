@@ -39,12 +39,12 @@ if (!fs.existsSync(targetDir)) {
 const content = `---
 title: "${slug}"
 published: ${getDate()}
-description: ''
-image: ''
+description: ""
+image: ""
 tags: []
-category: ''
-draft: false
-lang: ''
+category: ""
+draft: true
+lang: ""
 ---
 `
 
