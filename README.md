@@ -46,7 +46,7 @@
 2. 本地编辑：克隆仓库后执行 `pnpm install` 安装依赖。
     - 如未安装 [pnpm](https://pnpm.io)，可先运行 `npm install -g pnpm`。
 3. 编辑配置文件 `src/config.ts` 来定制你的博客。
-4. 运行 `pnpm new-post <slug>` 创建新文章，并在 `src/content/posts/` 中编辑。
+4. 运行 `pnpm new-post <title>` 创建新文章，并在 `src/content/posts/` 中编辑。
 5. 按 [部署指南](https://docs.astro.build/en/guides/deploy/) 部署到 Vercel、Netlify、GitHub Pages 等。部署前记得在 `astro.config.mjs` 中填写站点配置。
 
 ## 📝 文章 Frontmatter 示例
@@ -84,9 +84,27 @@ lang: jp      # 仅当文章语言与 `config.ts` 中站点语言不同时设置
 | `pnpm preview`             | 本地预览生产构建                           |
 | `pnpm check`               | 运行代码检查                               |
 | `pnpm format`              | 使用 Biome 格式化代码                      |
-| `pnpm new-post <slug>` | 以文件夹形式创建新文章                     |
+| `pnpm new-post <title>` | 创建新文章（支持单文件或文件夹模式）           |
 | `pnpm astro ...`           | 运行 Astro CLI（如 `astro add`、`astro check`） |
 | `pnpm astro --help`        | 查看 Astro CLI 帮助                        |
+
+**`new-post` 命令选项：**
+- `<title>`：文章标题（必需，也作为默认的文件夹名）
+- `-f, --folder <string>`：自定义文件夹名（支持嵌套目录，如 `category/subcategory`）
+- `-S, --single-file`：创建单文件（`folder.md`）而非文件夹
+- `-d, --draft <true|false>`：草稿状态（默认：true）
+- `-p, --published <date>`：发布日期（默认：今天）
+- `-F, --field <key=value>`：自定义 frontmatter 字段（可多次使用）
+- `-h, --help`：显示帮助信息
+
+示例：
+```bash
+pnpm new-post "我的文章"
+pnpm new-post "中文标题" --folder "english-slug"
+pnpm new-post "嵌套文章" --folder "技术/编程/JavaScript"
+pnpm new-post "文章" --single-file --draft false
+pnpm new-post "技术文章" --field "category=技术" --field "tags=编程,Astro"
+```
 
 ## ✏️ 贡献
 
