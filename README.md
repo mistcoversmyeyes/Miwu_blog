@@ -56,10 +56,38 @@
 
 ## 脚本与命令
 
-脚本与命令用法请参阅：
+以下命令均在项目根目录终端执行：
 
-- `scripts/README.md`
-- `scripts/README.zh-CN.md`
+| Command                    | Action                                    |
+|:---------------------------|:------------------------------------------|
+| `pnpm install`             | 安装依赖                                   |
+| `pnpm dev`                 | 启动本地开发服务器（默认 `localhost:4321`）|
+| `pnpm build`               | 构建生产站点到 `./dist/`                   |
+| `pnpm preview`             | 本地预览生产构建                           |
+| `pnpm check`               | 运行代码检查                               |
+| `pnpm format`              | 使用 Biome 格式化代码                      |
+| `pnpm new-post <title>` | 创建新文章（支持单文件或文件夹模式）           |
+| `pnpm astro ...`           | 运行 Astro CLI（如 `astro add`、`astro check`） |
+| `pnpm astro --help`        | 查看 Astro CLI 帮助                        |
+
+**`new-post` 命令选项：**
+- `<title>`：文章标题（必需，也作为默认的文件夹名）
+- `-f, --folder <string>`：自定义文件夹名（支持嵌套目录，如 `category/subcategory`）
+- `-S, --single-file`：创建单文件（`folder.md`）而非文件夹
+- `-d, --draft <true|false>`：草稿状态（默认：true）
+- `-p, --published <date>`：发布日期（默认：今天）
+- `-F, --field <key=value>`：自定义 frontmatter 字段（可多次使用）
+- `-h, --help`：显示帮助信息
+
+示例：
+```bash
+pnpm new-post "我的文章"
+pnpm new-post "中文标题" --folder "english-slug"
+pnpm new-post "嵌套文章" --folder "技术/编程/JavaScript"
+pnpm new-post "文章" --single-file --draft false
+pnpm new-post "技术文章" --field "category=技术" --field "tags=编程,Astro"
+```
+
 
 ## 许可证
 
