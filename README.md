@@ -84,7 +84,7 @@ All commands are run from the root of the project, from a terminal:
 | `pnpm preview`             | Preview your build locally, before deploying        |
 | `pnpm check`               | Run checks for errors in your code                  |
 | `pnpm format`              | Format your code using Biome                        |
-| `pnpm new-post <filename>` | Create a new post                                   |
+| `pnpm new-post <slug>` | Create a new post in folder format                                   |
 | `pnpm astro ...`           | Run CLI commands like `astro add`, `astro check`    |
 | `pnpm astro --help`        | Get help using the Astro CLI                        |
 
