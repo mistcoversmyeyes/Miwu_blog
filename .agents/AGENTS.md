@@ -211,6 +211,47 @@ pnpm format
 pnpm lint
 ```
 
+### git 工作流
+
+#### 分支约定
+
+- `blog`：仅写作相关提交（文章、草稿、配图、排版调整），不做工具或配置改动
+- `main`：只保留“完整文章”或“完整功能”的提交（每篇文章 1 个提交）
+- `feat/*`：工具或配置变更的开发分支，完成后 squash 合入 `main`
+
+#### 写作阶段（在 `blog` 分支）
+
+1. 创建文章并多次提交小改动，确保每次提交只涉及单篇文章
+2. 提交命名建议：
+   - `blog(posts/[draft | publish]): 添加文章「标题」`
+   - `blog(posts/[draft | publish]): 修订「标题」`
+3. 草稿阶段保持 `draft: true`，不做发布动作
+
+#### 功能更新同步
+
+- 当 `main` 有新功能时，`blog` 定期 `rebase main`，保持线性历史
+- 避免在 `blog` 上做 `merge main`，减少分叉与噪音
+
+#### 发布阶段（在 `blog` 分支 → `main` 分支）
+
+1. 在 `blog` 上把同一篇文章的提交 squash 成 1 个发布提交
+2. 提交信息建议：
+   - `blog(posts/publish): <动作>「标题」`
+   - 根据被 squash 的提交，撰写文章修改历史的描述（多行）：
+     - `- 修改1`
+     - `- 修改2`
+     - `- 修改3`
+3. 检查文章内容与 frontmatter，确保 `draft: false`
+4. 将发布提交 `cherry-pick` 到 `main`
+
+!!! Note
+    - 其中 `<动作>` 可替换为“添加草稿”、“发布文章”、“修订文章”等
+#### 工具与配置改动
+
+1. 从 `main` 切出 `feat/*` 分支开发
+2. 完成后 squash 合入 `main`
+3. `blog` 再 `rebase main` 获取最新功能
+
 ## 关键配置文件
 
 ### 站点配置: `src/config.ts`
@@ -305,7 +346,7 @@ $$
 示例：
 ```bash
 git add src/content/posts/your-post/
-git commit -m "blog(draft): 添加文章 “文章标题” "
+git commit -m "blog(draft): 添加文章「文章标题」"
 ```
 
 ### 部署
