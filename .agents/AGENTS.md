@@ -346,7 +346,7 @@ $$
 示例：
 ```bash
 git add src/content/posts/your-post/
-git commit -m "blog(draft): 添加文章 “文章标题” "
+git commit -m "blog(draft): 添加文章「文章标题」"
 ```
 
 ### 部署
