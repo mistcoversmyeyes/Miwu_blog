@@ -93,15 +93,31 @@ python .agents/skills/blog-post-assistant/scripts/suggest_taxonomy.py --posts-di
   ```bash
   pnpm new-post "<title>" --folder "<category>/<derived-title-folder>" --draft false --field "category=<category>" --field "tags=<tag1,tag2,...>" --field "description=<description>"
   ```
-  
+
 - 若分类为空或未设置，则不加分类前缀，使用 `--folder "<derived-title-folder>"`。
 - 用户不想设置的字段就省略；`tags` 用逗号分隔。
 
 !!! Note `new-post` 脚本的详细文档位于 `docs/scripts/README.md`。一旦有任何不清晰的地方，“必须”参考该文档。
 
-### 4. 最终检查与导师建议
+### 4. 添加发布记录表格
 
-- 打开生成的 `index.md`，确认 frontmatter：
+- 读取生成的 `index.md` 文件，检查末尾是否已有"发布记录"章节。
+- 如果没有，在文件末尾添加以下内容：
+
+  ```markdown
+  ## 发布记录
+  | 日期       | 版本 | 更新说明 |
+  | ---------- | ---- | -------- |
+  {today} | 1.0  | 初版发布 |
+  ```
+
+  其中 `{today}` 应替换为今天的日期（格式：YYYY-MM-DD）。
+
+!!! Note 发布记录表格用于记录文章的重要修订和发布历史，便于追踪文章的演变过程。
+
+### 5. 最终检查与导师建议
+
+- 再次确认 frontmatter：
   - 字段顺序符合项目规范：
   ```yaml
   ---
@@ -117,6 +133,8 @@ python .agents/skills/blog-post-assistant/scripts/suggest_taxonomy.py --posts-di
   ```
   - 字符串均为双引号 `"`
   - 文章处于草稿状态 `draft: true`
+
+- 确认文件末尾包含"发布记录"表格，且初始版本信息正确。
 
 - 作为导师，给作者提供下一步写作建议：
   - "文章骨架已创建。建议在写作时注意..."
