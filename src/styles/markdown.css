@@ -90,6 +90,14 @@
         }
     }
 
+    .plantuml-diagram {
+        @apply my-4 flex justify-center;
+    }
+
+    .plantuml-diagram img {
+        @apply max-w-full h-auto;
+    }
+
 
     ul, ol {
         li::marker {
