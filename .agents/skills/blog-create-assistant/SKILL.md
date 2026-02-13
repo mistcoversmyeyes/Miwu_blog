@@ -99,13 +99,13 @@ python .agents/skills/blog-post-assistant/scripts/suggest_taxonomy.py --posts-di
 
 !!! Note `new-post` 脚本的详细文档位于 `docs/scripts/README.md`。一旦有任何不清晰的地方，“必须”参考该文档。
 
-### 4. 添加发布记录表格
+### 4. 添加迭代记录表格
 
-- 读取生成的 `index.md` 文件，检查末尾是否已有"发布记录"章节。
+- 读取生成的 `index.md` 文件，检查末尾是否已有"迭代记录"章节。
 - 如果没有，在文件末尾添加以下内容：
 
   ```markdown
-  ## 发布记录
+  ## 迭代记录
   | 日期       | 版本 | 更新说明 |
   | ---------- | ---- | -------- |
   | {today} | {version}|  {更新说明} |
