@@ -9,15 +9,9 @@ draft: true
 lang: ""
 ---
 
-## 迭代记录
 
-| 日期       | 版本 | 更新说明 |
-| ---------- | ---- | -------- |
-| 2026-02-13 | 1.0  | 初始版本，从旧文章迁移 |
 
----
-
-本章节从 Intel 发展的通用计算架构开始，系统性的探讨了
+本章节从 Intel 发展的冯诺依曼体系结构计算机开始，系统性的探讨了不同各种各样不同语言编写的程序最终在冯诺依曼体系结构(Especially x86_64)上是如何被表示和执行的。
 
 
 ## 3.1 历史沿革
@@ -100,17 +94,17 @@ lang: ""
 | Indirect with Scaled Index | 带比例变址的间接寻址 | movl \$1, 8(%rsp, %rdi, 4) | 地址 = 基址 + 变址×比例 + 位移 |
 | Implicit Addressing        | 隐含寻址       | clc, ret                  | 操作数由指令隐含指定           |
 
-![](./images/Chapter 3!Machine Level Representation of program-image.png)
+![](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image.png)
 
 ### 数据移动指令
 
 #### movx系列指令：用于 源操作数和目的操作数大小一致的情况
 
-![](./images/Chapter 3!Machine Level Representation of program-image-1.png)
+![](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image-1.png)
 
 #### mov(扩展方式)(源操作数长度)(目的操作数长度):
 
-![](./images/Chapter 3!Machine Level Representation of program-image-2.png)
+![](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image-2.png)
 
 #### Push && pop:
 
@@ -176,7 +170,7 @@ lang: ""
 
 * x86 ISA 的运行时栈的结构
 
-  ![](./images/Chapter 3!Machine Level Representation of program-image-3.png)
+  ![](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image-3.png)
 
 ### 控制转移
 
@@ -205,7 +199,7 @@ A2：能，但是不实用。这样做需要额外的栈指针指向返回地址
 
   x86 架构支持最多6个参数传递寄存器，这里介绍的 System V ABI 会使用这全部六个寄存器。多余的参数会被逆序放入栈中，运行时则能够顺序取用。下图是寄存器传递参数的约定。
 
-  ![](./images/Chapter 3!Machine Level Representation of program-image-4.png)
+  ![](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image-4.png)
 
 ### 栈上的临时存储
 
@@ -240,20 +234,20 @@ A2：能，但是不实用。这样做需要额外的栈指针指向返回地址
 
 * 一个例子说明 callee-saved Register 如何被保存
 
-![](./images/Chapter 3!Machine Level Representation of program-image-5.png)
+![space](./images/Chapter%203!Machine%20Level%20Representation%20of%20program-image-5.png)
 
 
 
 ### 递归过程
 
-## 3.8 同构数据结构："数组"的空间分配和元素访问    (Array Allocation and Accessing)
+## 3.8 同构数据结构："数组"的空间分配和元素访问    (**Array Allocation and Accessing**)
 
 
 
 
 
 
-## 3.9 异构数据结构：Struct 和 Union    (**Heterogeneous Data Structures** )
+## 3.9 异构数据结构：Struct 和 Union  (**Heterogeneous Data Structures**)
 
 
 
@@ -264,3 +258,12 @@ A2：能，但是不实用。这样做需要额外的栈指针指向返回地址
 ## 参考
 
 ### 3.7
+
+
+
+---
+## 迭代记录
+
+| 日期       | 版本 | 更新说明 |
+| ---------- | ---- | -------- |
+| 2026-02-13 | 1.0  | 初始版本，从旧文章迁移 |
