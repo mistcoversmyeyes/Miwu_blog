@@ -23,6 +23,7 @@ import { parseDirectiveNode } from "./src/plugins/remark-directive-rehype.js";
 import { remarkExcerpt } from "./src/plugins/remark-excerpt.js";
 import { remarkReadingTime } from "./src/plugins/remark-reading-time.mjs";
 import { remarkPlantuml } from "./src/plugins/remark-plantuml.ts";
+import { remarkMkdocsAdmonitions } from "./src/plugins/remark-mkdocs-admonitions.ts";
 import { pluginCustomCopyButton } from "./src/plugins/expressive-code/custom-copy-button.js";
 
 // https://astro.build/config
@@ -108,6 +109,7 @@ export default defineConfig({
 			remarkPlantuml,
 			remarkReadingTime,
 			remarkExcerpt,
+			remarkMkdocsAdmonitions, // 新增：!!! 语法支持
 			remarkGithubAdmonitionsToDirectives,
 			remarkDirective,
 			remarkSectionize,
@@ -126,6 +128,7 @@ export default defineConfig({
 						important: (x, y) => AdmonitionComponent(x, y, "important"),
 						caution: (x, y) => AdmonitionComponent(x, y, "caution"),
 						warning: (x, y) => AdmonitionComponent(x, y, "warning"),
+						danger: (x, y) => AdmonitionComponent(x, y, "caution"), // GitHub CAUTION 兼容
 					},
 				},
 			],
