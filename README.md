@@ -46,7 +46,8 @@
      - `- 修改2`
      - `- 修改3`
 3. 检查文章内容与 frontmatter，确保 `draft: false`
-4. 将发布提交 `cherry-pick` 到 `main`
+4. 使用 `git rebase -i` 把发布提交从 `blog` 移动到 `main` 的下一个节点(保持 `cherry-pick ` 以后  `blog` 分支仍然基于 `main`)，并在 rebase 过程中修改提交信息为发布格式
+5. 使用 `git switch main` 切换到 `main`，使用 `git cherry-pick <commit-hash>` 把发布提交应用到 `main`。
 
 ### 工具与配置改动
 
