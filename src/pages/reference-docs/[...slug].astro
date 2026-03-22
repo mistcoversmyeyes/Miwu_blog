@@ -1,0 +1,116 @@
+---
+import path from "node:path";
+import Markdown from "@components/misc/Markdown.astro";
+import MainGridLayout from "@layouts/MainGridLayout.astro";
+import { getDir, url } from "@utils/url-utils";
+import { getCollection } from "astro:content";
+import { Icon } from "astro-icon/components";
+import ImageWrapper from "../../components/misc/ImageWrapper.astro";
+
+function normalizeTitleCandidate(candidate: string | undefined) {
+	if (typeof candidate !== "string") return "";
+	const cleaned = candidate.replace(/[`*_#]+/g, "").replace(/#+$/g, "").trim();
+	if (cleaned === "") return "";
+	return cleaned;
+}
+
+function getReferenceDocTitle(
+	explicitTitle: string | undefined,
+	body: string | undefined,
+	headings: { depth: number; text: string }[],
+	slug: string,
+) {
+	const explicit = normalizeTitleCandidate(explicitTitle);
+	if (explicit) return explicit;
+
+	if (typeof body === "string") {
+		const lines = body.split(/\r?\n/);
+		let inQuestionSection = false;
+
+		for (const rawLine of lines) {
+			const line = rawLine.trim();
+
+			if (!inQuestionSection) {
+				if (/^##\s+问题\s*$/.test(line)) {
+					inQuestionSection = true;
+				}
+				continue;
+			}
+
+			if (line === "") continue;
+			if (/^#{1,6}\s/.test(line)) break;
+
+			const questionTitle = normalizeTitleCandidate(line);
+			if (questionTitle) return questionTitle;
+		}
+	}
+
+	const firstHeading = headings.find((heading) => heading.depth === 1 || heading.depth === 2);
+	const headingTitle = normalizeTitleCandidate(firstHeading?.text);
+	if (headingTitle) return headingTitle;
+	return path.basename(slug);
+}
+
+export async function getStaticPaths() {
+	const entries = await getCollection("reference-docs");
+	return entries.map((entry) => ({
+		params: { slug: entry.slug },
+		props: { entry },
+	}));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await entry.render();
+const { remarkPluginFrontmatter } = await entry.render();
+const pageTitle = getReferenceDocTitle(entry.data.title, entry.body, headings, entry.slug);
+const pageDescription = entry.data.description || "文章配套的参考文档。";
+
+function getParentPostUrl(slug: string) {
+	const [postGroup] = slug.split("/");
+	if (!postGroup) return url("/archive/");
+	return url(`/posts/计算机网络/${postGroup}/`);
+}
+---
+
+<MainGridLayout title={pageTitle} description={pageDescription} lang={entry.data.lang} setOGTypeArticle={true} headings={headings}>
+	<div class="flex w-full rounded-[var(--radius-large)] overflow-hidden relative mb-4">
+		<div id="post-container" class="card-base z-10 px-6 md:px-9 pt-6 pb-4 relative w-full">
+			<div class="mb-4 flex flex-wrap items-center gap-4 text-black/30 dark:text-white/30 transition onload-animation">
+				<a href={getParentPostUrl(entry.slug)} class="inline-flex items-center gap-1 text-sm hover:text-[var(--primary)]">
+					<Icon name="material-symbols:arrow-back-rounded" />
+					<span>返回主文章</span>
+				</a>
+				<div class="flex flex-row items-center text-sm">
+					<div class="transition h-6 w-6 rounded-md bg-black/5 dark:bg-white/10 text-black/50 dark:text-white/50 flex items-center justify-center mr-2">
+						<Icon name="material-symbols:notes-rounded"></Icon>
+					</div>
+					<div>{remarkPluginFrontmatter.words} 字</div>
+				</div>
+			</div>
+
+			<div class="relative onload-animation">
+				<div
+					data-pagefind-body
+					data-pagefind-weight="10"
+					data-pagefind-meta="title"
+					class="transition w-full block font-bold mb-5 text-3xl md:text-[2.25rem]/[2.75rem] text-black/90 dark:text-white/90 md:before:w-1 before:h-5 before:rounded-md before:bg-[var(--primary)] before:absolute before:top-[0.75rem] before:left-[-1.125rem]"
+				>
+					{pageTitle}
+				</div>
+			</div>
+
+			{entry.data.image && (
+				<ImageWrapper
+					id="reference-doc-cover"
+					src={entry.data.image}
+					basePath={path.join("content/reference-docs/", getDir(entry.id))}
+					class="mb-8 rounded-xl banner-container onload-animation"
+				/>
+			)}
+
+			<Markdown class="mb-6 markdown-content onload-animation">
+				<Content />
+			</Markdown>
+		</div>
+	</div>
+</MainGridLayout>

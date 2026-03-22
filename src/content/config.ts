@@ -19,10 +19,25 @@ const postsCollection = defineCollection({
 		nextSlug: z.string().default(""),
 	}),
 });
+
+const referenceDocsCollection = defineCollection({
+	schema: z.object({
+		title: z.string().optional().default(""),
+		description: z.string().optional().default(""),
+		image: z.string().optional().default(""),
+		published: z.date().optional(),
+		updated: z.date().optional(),
+		tags: z.array(z.string()).optional().default([]),
+		category: z.string().optional().nullable().default(""),
+		lang: z.string().optional().default(""),
+	}),
+});
+
 const specCollection = defineCollection({
 	schema: z.object({}),
 });
 export const collections = {
 	posts: postsCollection,
+	"reference-docs": referenceDocsCollection,
 	spec: specCollection,
 };
