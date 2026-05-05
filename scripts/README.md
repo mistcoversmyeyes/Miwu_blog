@@ -97,3 +97,41 @@ Plans to add more script tools, such as:
 - Content migration assistant tools
 
 Welcome contributions for new script tools!
+
+## Hierarchical Category & Nested Directory Validation (Added)
+
+After introducing `categories` support, you can now scaffold and validate multi-level category paths and nested post directories.
+
+### 1) Create a nested post directory
+
+```bash
+pnpm new-post "Nested Category Validation" --folder "example/multi-level-category-validation"
+```
+
+### 2) Write hierarchical categories in frontmatter
+
+Use either slash-separated or comma-separated input:
+
+```bash
+# slash-separated (recommended for path-like input)
+pnpm new-post "Nested Category Validation" --field "categories=Systems/OS/Memory"
+
+# comma-separated
+pnpm new-post "Nested Category Validation" --field "categories=Systems,OS,Memory"
+```
+
+The script will output:
+
+```yaml
+categories: ["Systems", "OS", "Memory"]
+```
+
+### 3) Verify content collection recognition
+
+Run:
+
+```bash
+pnpm check
+```
+
+If `astro check` passes without collection schema errors, both nested directory posts and hierarchical categories are recognized correctly.

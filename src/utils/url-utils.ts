@@ -31,6 +31,17 @@ export function getCategoryUrl(category: string | null): string {
 	return url(`/archive/?category=${encodeURIComponent(category.trim())}`);
 }
 
+export function getCategoryPathUrl(categoryPath: string[]): string {
+	if (!categoryPath || categoryPath.length === 0) {
+		return url("/archive/?uncategorized=true");
+	}
+	const normalized = categoryPath.map((segment) => segment.trim()).filter(Boolean);
+	if (normalized.length === 0) {
+		return url("/archive/?uncategorized=true");
+	}
+	return url(`/archive/?categoryPath=${encodeURIComponent(normalized.join("/"))}`);
+}
+
 export function getDir(path: string): string {
 	const lastSlashIndex = path.lastIndexOf("/");
 	if (lastSlashIndex < 0) {

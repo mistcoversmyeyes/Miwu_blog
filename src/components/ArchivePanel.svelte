@@ -12,6 +12,7 @@ export let sortedPosts: Post[] = [];
 const params = new URLSearchParams(window.location.search);
 tags = params.has("tag") ? params.getAll("tag") : [];
 categories = params.has("category") ? params.getAll("category") : [];
+const categoryPath = params.get("categoryPath");
 const uncategorized = params.get("uncategorized");
 
 interface Post {
@@ -20,8 +21,22 @@ interface Post {
 		title: string;
 		tags: string[];
 		category?: string;
+		categories?: string[];
 		published: Date;
 	};
+}
+
+function parseCategoryPath(path: string | null): string[] {
+	if (!path) return [];
+	return path
+		.split("/")
+		.map((segment) => segment.trim())
+		.filter(Boolean);
+}
+
+function isPathPrefix(prefix: string[], fullPath: string[]): boolean {
+	if (prefix.length === 0 || prefix.length > fullPath.length) return false;
+	return prefix.every((segment, idx) => segment === fullPath[idx]);
 }
 
 interface Group {
@@ -56,6 +71,18 @@ onMount(async () => {
 		filteredPosts = filteredPosts.filter(
 			(post) => post.data.category && categories.includes(post.data.category),
 		);
+	}
+
+	if (categoryPath) {
+		const selectedPath = parseCategoryPath(categoryPath);
+		filteredPosts = filteredPosts.filter((post) => {
+			const postPath = Array.isArray(post.data.categories)
+				? post.data.categories
+				: post.data.category
+					? [post.data.category]
+					: [];
+			return isPathPrefix(selectedPath, postPath);
+		});
 	}
 
 	if (uncategorized) {

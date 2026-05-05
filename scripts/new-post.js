@@ -120,6 +120,7 @@ function generateFrontmatter(config) {
 		"image",
 		"tags",
 		"category",
+		"categories",
 		"draft",
 		"lang",
 	];
@@ -130,6 +131,7 @@ function generateFrontmatter(config) {
 		image: "",
 		tags: [],
 		category: "",
+		categories: [],
 		draft: config.draft,
 		lang: "",
 	};
@@ -140,12 +142,13 @@ function generateFrontmatter(config) {
 			const customValue = config.customFields[field];
 
 			// Special handling for tags: parse comma-separated string to array
-			if (field === "tags" && typeof customValue === "string") {
-				const tagsArray = customValue
-					.split(",")
-					.map((tag) => tag.trim())
-					.filter((tag) => tag.length > 0);
-				lines.push(`${field}: ${formatYamlValue(tagsArray)}`);
+			if ((field === "tags" || field === "categories") && typeof customValue === "string") {
+				const splitter = field === "categories" && customValue.includes("/") ? "/" : ",";
+				const valuesArray = customValue
+					.split(splitter)
+					.map((item) => item.trim())
+					.filter((item) => item.length > 0);
+				lines.push(`${field}: ${formatYamlValue(valuesArray)}`);
 			} else {
 				lines.push(`${field}: ${formatYamlValue(customValue)}`);
 			}

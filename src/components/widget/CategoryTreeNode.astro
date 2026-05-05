@@ -1,0 +1,30 @@
+---
+import type { CategoryNode } from "@utils/content-utils";
+import ButtonLink from "../control/ButtonLink.astro";
+
+interface Props {
+	node: CategoryNode;
+	depth?: number;
+}
+
+const { node, depth = 0 } = Astro.props;
+const indent = depth * 0.75;
+---
+
+<div style={`margin-left: ${indent}rem;`}>
+	<ButtonLink
+		url={node.url}
+		badge={String(node.count)}
+		label={`View all posts in the ${node.path.join(" / ")} category`}
+	>
+		{node.name}
+	</ButtonLink>
+</div>
+
+{node.children.length > 0 && (
+	<div>
+		{node.children.map((child) => (
+			<Astro.self node={child} depth={depth + 1} />
+		))}
+	</div>
+)}
