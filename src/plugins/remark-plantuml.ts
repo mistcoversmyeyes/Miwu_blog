@@ -1,3 +1,4 @@
+import type { Root } from "mdast";
 import { deflateRawSync } from "node:zlib";
 import { visit } from "unist-util-visit";
 
@@ -67,7 +68,7 @@ export function remarkPlantuml(options: PlantumlOptions = {}) {
 	const className = options.className ?? "plantuml-diagram";
 	const alt = options.alt ?? "PlantUML diagram";
 
-	return (tree) => {
+	return (tree: Root) => {
 		visit(tree, "code", (node, index, parent) => {
 			if (!parent || typeof index !== "number") return;
 			const lang = (node.lang ?? "").toLowerCase();

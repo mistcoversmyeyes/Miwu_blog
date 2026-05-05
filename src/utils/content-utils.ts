@@ -1,7 +1,7 @@
 import { type CollectionEntry, getCollection } from "astro:content";
 import I18nKey from "@i18n/i18nKey";
 import { i18n } from "@i18n/translation";
-import { getCategoryUrl } from "@utils/url-utils.ts";
+import { getCategoryPathUrl, getCategoryUrl } from "@utils/url-utils.ts";
 
 // // Retrieve posts and sort them by publication date
 async function getRawSortedPosts() {
@@ -78,22 +78,85 @@ export type Category = {
 	url: string;
 };
 
+export type CategoryNode = {
+	name: string;
+	count: number;
+	url: string;
+	path: string[];
+	children: CategoryNode[];
+};
+
+function getCategoryPath(post: CollectionEntry<"posts">): string[] {
+	if (Array.isArray(post.data.categories) && post.data.categories.length > 0) {
+		return post.data.categories.map((segment) => String(segment).trim()).filter(Boolean);
+	}
+	if (post.data.category && post.data.category.trim()) {
+		return [post.data.category.trim()];
+	}
+	return [];
+}
+
+export async function getCategoryTree(): Promise<CategoryNode[]> {
+	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
+		return import.meta.env.PROD ? data.draft !== true : true;
+	});
+
+	const root = new Map<string, CategoryNode>();
+
+	for (const post of allBlogPosts) {
+		const categoryPath = getCategoryPath(post);
+		if (categoryPath.length === 0) continue;
+
+		let currentLevel = root;
+		const prefix: string[] = [];
+		for (const segment of categoryPath) {
+			prefix.push(segment);
+			const key = segment.toLowerCase();
+			let node = currentLevel.get(key);
+			if (!node) {
+				node = {
+					name: segment,
+					count: 0,
+					url: getCategoryPathUrl(prefix),
+					path: [...prefix],
+					children: [],
+				};
+				currentLevel.set(key, node);
+			}
+			node.count += 1;
+
+			const childMap = new Map<string, CategoryNode>(
+				node.children.map((child) => [child.name.toLowerCase(), child]),
+			);
+			currentLevel = childMap;
+			node.children = Array.from(childMap.values());
+		}
+	}
+
+	function sortTree(nodes: CategoryNode[]): CategoryNode[] {
+		for (const node of nodes) {
+			node.children = sortTree(node.children);
+		}
+		return nodes.sort((a, b) => a.name.toLowerCase().localeCompare(b.name.toLowerCase()));
+	}
+
+	return sortTree(Array.from(root.values()));
+}
+
 export async function getCategoryList(): Promise<Category[]> {
 	const allBlogPosts = await getCollection<"posts">("posts", ({ data }) => {
 		return import.meta.env.PROD ? data.draft !== true : true;
 	});
 	const count: { [key: string]: number } = {};
-	allBlogPosts.forEach((post: { data: { category: string | null } }) => {
-		if (!post.data.category) {
+	allBlogPosts.forEach((post) => {
+		const categoryPath = getCategoryPath(post);
+		if (categoryPath.length === 0) {
 			const ucKey = i18n(I18nKey.uncategorized);
 			count[ucKey] = count[ucKey] ? count[ucKey] + 1 : 1;
 			return;
 		}
 
-		const categoryName =
-			typeof post.data.category === "string"
-				? post.data.category.trim()
-				: String(post.data.category).trim();
+		const categoryName = categoryPath.join(" / ");
 
 		count[categoryName] = count[categoryName] ? count[categoryName] + 1 : 1;
 	});
