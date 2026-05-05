@@ -227,3 +227,32 @@ pnpm format   # Biome 格式化
 ---
 
 **提示**：使用 VS Code + Frontmatter CMS 扩展可以获得更好的内容创作体验。
+
+## 多级分类与嵌套目录验证补充（新增）
+
+### Frontmatter 新增字段建议
+
+除原有 `category` 外，可使用 `categories` 表达层级分类：
+
+```yaml
+categories: ["系统编程", "操作系统", "内存管理"]
+```
+
+兼容策略：若同时存在，优先以 `categories` 作为层级分类来源。
+
+### 嵌套目录文章识别示例
+
+项目中已加入验证样例文章：
+
+`src/content/posts/示例/多级分类与目录识别验证/index.md`
+
+该样例同时验证：
+
+1. `posts/` 下多层目录结构可被内容集合识别；
+2. `categories` 多级分类可被 schema 与归档筛选逻辑识别。
+
+可通过以下命令快速校验：
+
+```bash
+pnpm check
+```
